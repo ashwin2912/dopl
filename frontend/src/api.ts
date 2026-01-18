@@ -23,6 +23,7 @@ export interface BioResponse {
 export async function sendMessage(
   message: string,
   conversationHistory: Message[],
+  captchaToken: string,
 ): Promise<string> {
   try {
     // FUTURE: Add authentication headers here
@@ -40,10 +41,21 @@ export async function sendMessage(
           role: msg.role,
           content: msg.content,
         })),
+        captchaToken,
       } as ChatRequest),
     });
 
     if (!response.ok) {
+      // Try to parse error response body (e.g., moderation rejection)
+      const errorData = await response.json();
+      console.log("Error response data:", errorData);
+
+      if (errorData.response) {
+        // Throw the server's message directly
+        throw new Error(errorData.response);
+      }
+
+      // If no response field, throw generic error
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -64,6 +76,57 @@ export async function fetchBio(): Promise<BioResponse> {
     }
 
     const data: BioResponse = await response.json();
+    return data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
+}
+
+// Blog API functions
+export interface BlogParagraph {
+  id: string;
+  heading: string;
+  content: string;
+}
+
+export interface BlogTopic {
+  id: string;
+  title: string;
+  docId: string;
+  paragraphs?: BlogParagraph[];
+}
+
+export interface BlogTopicsResponse {
+  topics: BlogTopic[];
+  count: number;
+}
+
+export async function fetchBlogTopics(): Promise<BlogTopic[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/blog/topics`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: BlogTopicsResponse = await response.json();
+    return data.topics;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
+}
+
+export async function fetchBlogTopic(docId: string): Promise<BlogTopic> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/blog/topics/${docId}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: BlogTopic = await response.json();
     return data;
   } catch (error) {
     console.error("API Error:", error);

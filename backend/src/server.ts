@@ -3,6 +3,7 @@ import cors from "cors";
 import config from "./config/env.js";
 import chatRouter from "./routes/chat.js";
 import authSetupRouter from "./routes/auth-setup.js";
+import blogRouter from "./routes/blog.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/api/chat", chatRouter);
+app.use("/api/blog", blogRouter);
 
 // SETUP ROUTES - Only for initial OAuth setup
 // TODO: Comment out or remove these routes in production!

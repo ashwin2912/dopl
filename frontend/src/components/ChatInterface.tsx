@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import MessageBubble, { Message } from "./MessageBubble";
 import { sendMessage } from "../api";
 
 const ChatInterface: React.FC = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +81,15 @@ const ChatInterface: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(inputValue, messages);
+      // Generate CAPTCHA token
+      if (!executeRecaptcha) {
+        throw new Error("reCAPTCHA not ready. Please refresh the page.");
+      }
+
+      const captchaToken = await executeRecaptcha("chat_message");
+      console.log("CAPTCHA token generated");
+
+      const response = await sendMessage(inputValue, messages, captchaToken);
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -101,12 +111,24 @@ const ChatInterface: React.FC = () => {
       }
     } catch (error) {
       console.error("Error sending message:", error);
+      console.log("Error details:", {
+        type: typeof error,
+        isError: error instanceof Error,
+        message: error instanceof Error ? error.message : "unknown",
+      });
+
+      let errorContent =
+        "Sorry, I'm having trouble connecting right now. Please try again later.";
+
+      // Extract error message from Error object
+      if (error instanceof Error) {
+        errorContent = error.message;
+      }
 
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content:
-          "Sorry, I'm having trouble connecting right now. Please try again later.",
+        content: errorContent,
         timestamp: new Date(),
       };
 

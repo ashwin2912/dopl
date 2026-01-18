@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import config from "../config/env.js";
+import GoogleClientFactory from "./googleClient.js";
 
 export interface GoogleDocContent {
   name: string;
@@ -13,18 +14,8 @@ class GoogleDriveService {
   private docs;
 
   constructor() {
-    const oauth2Client = new google.auth.OAuth2(
-      config.googleClientId,
-      config.googleClientSecret,
-      config.googleRedirectUri,
-    );
-
-    oauth2Client.setCredentials({
-      refresh_token: config.googleRefreshToken,
-    });
-
-    this.drive = google.drive({ version: "v3", auth: oauth2Client });
-    this.docs = google.docs({ version: "v1", auth: oauth2Client });
+    this.drive = GoogleClientFactory.getDriveClient();
+    this.docs = GoogleClientFactory.getDocsClient();
   }
 
   /**

@@ -44,4 +44,17 @@ temp/
 
 # Sensitive credentials
 vault/
-*.json
+credentials.json
+service-account*.json
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# OS
+Thumbs.db
+
+#github
+creds/
+.env.production
