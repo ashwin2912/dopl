@@ -11,7 +11,7 @@ export interface KnowledgeBase {
 class KnowledgeBaseService {
   private knowledgeBase: KnowledgeBase | null = null;
   private googleDriveService: GoogleDriveService;
-  private updateInterval: number = 5 * 60 * 1000; // 5 minutes
+  private updateInterval: number = 24 * 60 * 60 * 1000; // 24 hours
 
   constructor() {
     this.googleDriveService = new GoogleDriveService();

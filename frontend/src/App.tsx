@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import ChatInterface from "./components/ChatInterface";
@@ -30,7 +29,6 @@ function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-200 transition-colors duration-300">
-      <Header />
       <main className="flex-1 max-w-7xl mx-auto px-8 py-16 w-full">
         <HeroSection bio={bio} loading={loading} />
         <ChatInterface />
