@@ -1,26 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
-        mono: ["Courier New", "Monaco", "Consolas", "monospace"],
-        system: [
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Arial",
-          "sans-serif",
-        ],
+        display: ["Inter", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
       colors: {
-        "retro-bg": "#c0c0c0",
-        "retro-dark": "#333333",
-        "retro-light": "#ffffff",
-        "retro-gray": "#808080",
-        "retro-blue": "#0000cd",
-        "retro-accent": "#00ff00",
-        "retro-border": "#000000",
+        primary: "#197fe6",
+        "background-light": "#fdfdfd",
+        "background-dark": "#0a0a0a",
+        "card-dark": "#121212",
+      },
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+        full: "9999px",
       },
     },
   },

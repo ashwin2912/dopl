@@ -11,8 +11,8 @@ const ChatInterface: React.FC = () => {
   const [messageCount, setMessageCount] = useState(0);
   const [isLimitReached, setIsLimitReached] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const MESSAGE_LIMIT = 3;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const MESSAGE_LIMIT = 5;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -22,21 +22,13 @@ const ChatInterface: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Auto-resize textarea
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  }, [inputValue]);
-
   // Add welcome message and load message count on component mount
   useEffect(() => {
     const welcomeMessage: Message = {
       id: "welcome",
       role: "assistant",
       content:
-        "Hey there! I'm the digital twin. Ask me anything about my background, experience, or interests!",
+        "Hello. I'm the digital twin of this portfolio. Ask me about technical proficiencies or active projects.",
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
@@ -62,7 +54,7 @@ const ChatInterface: React.FC = () => {
         id: Date.now().toString(),
         role: "assistant",
         content:
-          "You've reached the 3-message limit. To continue chatting, please contact me directly!",
+          "You've reached the 5-message limit. To continue chatting, please contact me directly!",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, limitMessage]);
@@ -139,26 +131,56 @@ const ChatInterface: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto p-8 scrollbar-retro bg-retro-bg">
-        <div className="container mx-auto max-w-4xl">
+    <section className="max-w-4xl mx-auto mb-20">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+          <h2 className="text-xs font-bold uppercase tracking-[0.3em]">
+            Neural Interface v2
+          </h2>
+        </div>
+        <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          {isLimitReached
+            ? `Limit: ${MESSAGE_LIMIT}/${MESSAGE_LIMIT}`
+            : `Remaining: ${MESSAGE_LIMIT - messageCount}/${MESSAGE_LIMIT}`}
+        </div>
+      </div>
+      <div className="bg-black border border-white/10 rounded-lg overflow-hidden terminal-glow">
+        {/* Terminal Header */}
+        <div className="bg-slate-900/50 border-b border-white/5 px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-white/20"></div>
+              <div className="w-2 h-2 rounded-full bg-white/20"></div>
+              <div className="w-2 h-2 rounded-full bg-white/20"></div>
+            </div>
+            <span className="text-[10px] font-mono text-slate-500 tracking-wider">
+              PROMPT_SYSTEM:READY
+            </span>
+          </div>
+        </div>
+
+        {/* Messages Area */}
+        <div className="p-6 h-[260px] overflow-y-auto flex flex-col gap-5 font-mono text-xs scrollbar-hide">
           {messages.map((message) => (
             <MessageBubble key={message.id} message={message} />
           ))}
 
           {isLoading && (
-            <div className="flex justify-start mb-3">
-              <div className="message-assistant">
-                <div className="font-mono text-sm">
-                  <span className="font-bold text-xs text-retro-gray block mb-1">
-                    DIGITAL TWIN
-                  </span>
-                  <div className="flex gap-1">
-                    <span className="typing-indicator"></span>
-                    <span className="typing-indicator"></span>
-                    <span className="typing-indicator"></span>
-                  </div>
+            <div className="flex gap-4 items-start max-w-2xl">
+              <div className="text-primary mt-0.5">
+                <span className="material-symbols-outlined text-sm">
+                  terminal
+                </span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-[9px] text-slate-600 uppercase">
+                  Processing
+                </span>
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                  <span className="w-2 h-2 bg-primary rounded-full animate-pulse delay-100"></span>
+                  <span className="w-2 h-2 bg-primary rounded-full animate-pulse delay-200"></span>
                 </div>
               </div>
             </div>
@@ -166,59 +188,35 @@ const ChatInterface: React.FC = () => {
 
           <div ref={messagesEndRef} />
         </div>
-      </div>
 
-      {/* Input Area */}
-      <div className="border-t-4 border-black bg-retro-gray p-8">
-        <div className="container mx-auto max-w-4xl">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <div className="bg-retro-light border-2 border-black p-4 w-full">
-              <textarea
-                ref={textareaRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit(e);
-                  }
-                }}
-                placeholder="Type your message here... (Shift+Enter for new line)"
-                className="w-full text-base resize-none overflow-y-auto min-h-[48px] max-h-[200px] border-0 p-0 focus:outline-none bg-transparent font-mono"
-                disabled={isLoading}
-                rows={1}
-              />
-            </div>
+        {/* Input Area */}
+        <div className="border-t border-white/5 bg-slate-900/30 p-3">
+          <form onSubmit={handleSubmit} className="flex items-center gap-3">
+            <span className="text-primary font-bold text-sm ml-2">$</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder={
+                isLimitReached ? "Message limit reached..." : "Type command..."
+              }
+              className="w-full bg-transparent border-none focus:ring-0 focus:outline-none text-white font-mono text-xs placeholder:text-slate-700 p-0"
+              disabled={isLoading || isLimitReached}
+            />
             <button
               type="submit"
-              className="retro-button font-bold text-base px-8 py-3 self-start"
+              className="text-slate-500 hover:text-primary transition-colors pr-2 disabled:opacity-30 disabled:hover:text-slate-500"
               disabled={isLoading || !inputValue.trim() || isLimitReached}
             >
-              SEND
+              <span className="material-symbols-outlined text-lg">
+                arrow_right_alt
+              </span>
             </button>
           </form>
-
-          {/* Message count indicator */}
-          <div className="mt-3 text-sm font-mono text-retro-dark">
-            {isLimitReached ? (
-              <span className="text-red-600 font-bold">
-                Message limit reached (3/3)
-              </span>
-            ) : (
-              <span>
-                Messages remaining: {MESSAGE_LIMIT - messageCount} /{" "}
-                {MESSAGE_LIMIT}
-              </span>
-            )}
-          </div>
-
-          {/* FUTURE: Add authentication/payment UI here */}
-          {/* <div className="mt-2 text-xs text-retro-gray font-mono">
-            Credits remaining: XX | <a href="/pricing">Upgrade</a>
-          </div> */}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
