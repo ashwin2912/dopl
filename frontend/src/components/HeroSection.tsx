@@ -30,7 +30,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ bio, loading }) => {
         <div
           className="w-20 h-20 rounded-full grayscale hover:grayscale-0 transition-all duration-500 bg-cover bg-center border border-white/10"
           style={{
-            backgroundImage: "url('/portrait.jpg')",
+            backgroundImage: "url('/potrait.jpeg')",
             backgroundColor: "#333",
           }}
         ></div>
@@ -39,7 +39,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ bio, loading }) => {
       {/* Middle: Main Heading and Bio */}
       <div className="lg:w-[55%] flex flex-col gap-10">
         <div className="max-w-2xl">
-          <h1 className="text-5xl lg:text-7xl font-bold tracking-tight mb-8 leading-[1.1]">
+          <h1 className="text-3xl lg:text-5xl font-bold tracking-tight mb-8 leading-[1.1]">
             {loading ? (
               "Loading..."
             ) : (
@@ -56,24 +56,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ bio, loading }) => {
                 "Full-stack engineer specializing in the intersection of generative AI and intuitive interface design."}
           </p>
         </div>
-        <div className="flex items-center gap-6 mt-4">
-          <Link
-            to="/blog"
-            className="bg-primary text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-blue-600 transition-all flex items-center gap-3"
-          >
-            View Portfolio
-            <span className="material-symbols-outlined text-sm">
-              north_east
-            </span>
-          </Link>
-        </div>
       </div>
 
       {/* Right: Journal Sidebar */}
       <div className="lg:w-[30%] flex flex-col gap-6">
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-4">
           <span className="text-[10px] font-bold uppercase tracking-widest">
-            Selected Journal
+            Journal
           </span>
           <span className="material-symbols-outlined text-sm opacity-50">
             more_vert
@@ -87,9 +76,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ bio, loading }) => {
               to={`/blog/${topic.docId}`}
             >
               <div className="flex flex-col gap-2 p-4 bg-slate-50 dark:bg-card-dark/50 border border-slate-100 dark:border-white/5 hover:border-primary/30 transition-all">
-                <span className="text-[10px] text-primary font-bold uppercase tracking-tighter">
-                  Journal
-                </span>
                 <h3 className="text-sm font-semibold leading-tight group-hover:text-primary transition-colors">
                   {topic.title}
                 </h3>

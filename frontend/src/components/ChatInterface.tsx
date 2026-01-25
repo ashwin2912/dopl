@@ -136,7 +136,7 @@ const ChatInterface: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
           <h2 className="text-xs font-bold uppercase tracking-[0.3em]">
-            Neural Interface v2
+            My Dopl AI
           </h2>
         </div>
         <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
@@ -161,7 +161,7 @@ const ChatInterface: React.FC = () => {
         </div>
 
         {/* Messages Area */}
-        <div className="p-6 h-[260px] overflow-y-auto flex flex-col gap-5 font-mono text-xs scrollbar-hide">
+        <div className="p-6 min-h-[160px] max-h-[500px] overflow-y-auto flex flex-col gap-5 font-mono text-xs scrollbar-hide">
           {messages.map((message) => (
             <MessageBubble key={message.id} message={message} />
           ))}

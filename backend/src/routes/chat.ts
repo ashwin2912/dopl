@@ -164,6 +164,11 @@ router.get("/bio", readRateLimiter, (req: Request, res: Response) => {
       bio: kb.bio,
       lastUpdated: kb.lastUpdated,
     });
+
+    // Refresh knowledge base in the background on each visit
+    knowledgeBaseService.refresh().catch((error) => {
+      console.error("Background knowledge base refresh failed:", error);
+    });
   } catch (error) {
     console.error("Error fetching bio:", error);
     res.status(500).json({

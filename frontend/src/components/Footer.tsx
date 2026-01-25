@@ -10,28 +10,31 @@ const Footer: React.FC = () => {
               Portfolio v2.4
             </span>
           </div>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-            Defined in San Francisco. Built for the web.
-          </p>
         </div>
         <div className="flex items-center gap-12">
           <a
             className="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-primary transition-colors"
-            href="#"
+            href="https://github.com/ashwin2912"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Github
           </a>
           <a
             className="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-primary transition-colors"
-            href="#"
+            href="https://www.linkedin.com/in/ashwindhanasamy/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             LinkedIn
           </a>
           <a
             className="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-primary transition-colors"
-            href="#"
+            href="https://drive.google.com/file/d/1klg1XSALJdbMhl3onyFzifbg7boa5QNN/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Read.cv
+            CV
           </a>
         </div>
         <div className="flex items-center gap-4 text-[9px] font-mono text-slate-600">
