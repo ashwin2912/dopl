@@ -131,12 +131,14 @@ jobs:
             docker pull ghcr.io/${GITHUB_REPOSITORY}/backend:latest
             docker pull ghcr.io/${GITHUB_REPOSITORY}/frontend:latest
 
-            # Export for docker-compose
-            export GITHUB_REPOSITORY=${GITHUB_REPOSITORY}
+            # Write .env for docker-compose variable substitution
+            echo "GITHUB_REPOSITORY=${GITHUB_REPOSITORY}" > .env
+
+            # Stop old containers and remove old images
+            docker-compose -f docker-compose.prod.yml down --rmi all 2>/dev/null || true
 
             # Deploy with production compose file
-            docker-compose -f docker-compose.prod.yml down
-            docker-compose -f docker-compose.prod.yml up -d
+            docker-compose -f docker-compose.prod.yml up -d --force-recreate
 
             # Cleanup old images
             docker system prune -f
