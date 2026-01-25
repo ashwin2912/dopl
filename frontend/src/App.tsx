@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
+import HeroSection from "./components/HeroSection";
 import ChatInterface from "./components/ChatInterface";
 import BlogTopics from "./components/BlogTopics";
 import BlogDetail from "./components/BlogDetail";
 import { fetchBio } from "./api";
-import "./styles/retro.css";
 
 function HomePage() {
-  const [name, setName] = useState("ASHWIN'S DIGITAL TWIN");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -17,13 +17,9 @@ function HomePage() {
     const loadBio = async () => {
       try {
         const data = await fetchBio();
-        if (data.name) {
-          setName(data.name);
-        }
         setBio(data.bio);
       } catch (error) {
         console.error("Failed to load bio:", error);
-        // Use defaults if bio fetch fails
       } finally {
         setLoading(false);
       }
@@ -33,17 +29,13 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-retro-bg">
-      <Header name={name} bio={bio} loading={loading} />
-      <div className="p-4 bg-retro-dark border-b-2 border-black">
-        <Link
-          to="/blog"
-          className="inline-block bg-retro-blue text-retro-light px-6 py-3 border-2 border-black font-mono hover:bg-retro-light hover:text-retro-dark transition-colors"
-        >
-          READ MY BLOG →
-        </Link>
-      </div>
-      <ChatInterface />
+    <div className="min-h-screen flex flex-col bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-200 transition-colors duration-300">
+      <Header />
+      <main className="flex-1 max-w-7xl mx-auto px-8 py-16 w-full">
+        <HeroSection bio={bio} loading={loading} />
+        <ChatInterface />
+      </main>
+      <Footer />
     </div>
   );
 }
